@@ -63,24 +63,27 @@ function useFeatures() {
 
 function abc() {
 
-  var data = images;
   var url = "http://localhost:4000/create";
-
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: data,
-    contentType: "application/json; charset=utf-8",
-    dataType: "jsonp",
-    error: function() {
-      alert("Error");
+  
+  const data = images;
+  const images2 = [
+    {
+      "id": "1",
+      "label": "Objeto 1",
+      "src": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD"
     },
-    success: function() {
-      alert("OK");
-    }
-  });
+    {
+      "id": "2",
+      "label": "Objeto 2",
+      "src": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD"
+    },
+  ];
 
-  //console.log(images);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url);
+  xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhr.send(JSON.stringify(data)); 
+  
 }
 
 function gotResultUpload(nomeImage) {

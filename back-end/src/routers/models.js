@@ -5,8 +5,16 @@ const path = require("path");
 const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
+router.use(bodyParser.json({limit: '10mb', extended: true}))
+router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+
+router.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+}); 
 
 //Página WEB
 /* router.get("/index", (req, res) => {
@@ -24,19 +32,10 @@ router.use(bodyParser.json());
 //Enviar pedido
 router.post('/create', function (req, res) {
 
-  //const vari = req.body.textAA;
-  //const vari = "aaaaa";
-
-  /* var dog = req.body;
-  console.log(dog);
-  var dog2 = req.body.nome;
-  console.log(dog2); */
-
-  console.log("funciona");
-  console.log("teste: " + req.body);
-  //res.send(req.body);
-  
-  //res.send("info: " + req.body);
+  console.log("--------------funciona-----------------------");
+  console.log("ID: " + req.body[3].id);
+  console.log("LABELS: " + req.body[3].label);
+  //console.log("SRC: " + req.body[0].src);
 
   /* console.log("Label do objeto: " + images[0].label);
   console.log("ID da imagem: " + images[0].id);
