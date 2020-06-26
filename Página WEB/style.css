@@ -1,0 +1,112 @@
+h1 {
+    color: blue;
+    text-shadow: 1px 1px 2px black;
+    padding-left: 50px;
+    padding-top: 15px;
+}
+
+body {
+    background-color: #EDEDEE;
+}
+
+hr {
+    border-top: 1px solid #ededee;
+}
+
+#conteudo-1 {
+    float: left;
+    width: 40%;
+    padding: 10px;
+    padding-top: 2%;
+    padding-left: 8%;
+}
+
+div.titulo {
+    padding: 10px;
+    font-size: 20px;
+}
+
+#conteudo-2 {
+    float: right;
+    width: 35%;
+    position: fixed;
+    left: 50%;
+    padding-top: 2%;
+    padding-right: 10%;
+    padding-left: 8%;
+}
+
+.camera {
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px grey;
+    padding: 5;
+    background-color: #fff;
+}
+
+.cameraAdd {
+    border-style: dashed;
+    border-color: grey;
+    border-radius: 10px;
+    text-align: center;
+    padding: 6%;
+    cursor: pointer;
+}
+
+.cameraAdd:hover {
+    color: blue;
+    box-shadow: 0px 0px 3px blue;
+}
+
+.icon {
+    padding-left: 28px;
+    background: no-repeat left center;
+    background-image: url(plus.png);
+}
+
+.output {
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px grey;
+    padding: 2%;
+    background-color: #fff;
+}
+
+button {
+    background-color: #e6f9ff;
+    color: #0033cc;
+    border: none;
+    padding: 10px;
+    font-size: medium;
+    text-align: center;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.btnExport {
+    background-color: #e6f9ff;
+    color: #0033cc;
+    font-size: medium;
+    margin-left: 50%;
+}
+
+.btnTrain {
+    background-color: #EDEDEE;
+    color: #47476b;
+}
+
+span {
+    text-align: left;
+    padding: 10px;
+    color: #A4A6A8;
+}
+
+div.scrollmenu {
+    background-color: #fff;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.mostraImage {
+    height: 100;
+    max-height: 100;
+}
