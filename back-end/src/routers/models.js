@@ -4,6 +4,7 @@ const router = Router();
 const path = require("path");
 const mysqlConnection = require('../database');
 const { json } = require('body-parser');
+const fs = require('fs');
 
 router.use(bodyParser.json({limit: '10mb', extended: true}))
 router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
@@ -32,28 +33,37 @@ router.use(function (req, res, next) {
 //Enviar pedido
 router.post('/create', function (req, res) {
 
-  console.log("--------------funciona-----------------------");
-  console.log("ID: " + req.body[3].id);
-  console.log("LABELS: " + req.body[3].label);
-  //console.log("SRC: " + req.body[0].src);
+  console.log("----------------funciona----------------");
 
-  /* console.log("Label do objeto: " + images[0].label);
-  console.log("ID da imagem: " + images[0].id);
-  console.log("Localização da imagem: " + images[0].src);  */
+  var nomePedido = "Kyrios";
 
-/*   var sql =  "INSERT INTO pedido (nome, data) VALUES ('"+vari+"', NOW())";
+  /* var sql =  "INSERT INTO pedido (nome, data) VALUES ('"+nomePedido+"', NOW())";
   mysqlConnection.query(sql, (err, result) => {
     if(err) throw err;
     console.log("Inserido na tabela 'pedido'");
-  })
+  }) */
+
+  for (i = 0; i<= req.body.length; i++){
+    //console.log("count: " + count + "; id: " + i);
   
-  //depois é para repetir enquanto houverem objetos
-  var sql =  "INSERT INTO objeto (label) VALUES ('a')";
-  mysqlConnection.query(sql, (err, result) => {
-    if(err) throw err;
-    console.log("Inserido na tabela 'objeto'");
-  })  */
-        
+    var image = req.body[i].src;
+    var data = image.replace(/^data:image\/\w+;base64,/, '');
+    var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/" + req.body[i].name;
+    fs.writeFile(basedir, data, {encoding: 'base64'}, function(err, data){
+      if (err) {
+        console.log('err', err);
+      } 
+    }); 
+  
+    var sql =  "INSERT INTO objeto (idobjeto, label, src) VALUES ('"+req.body[i].id+"', '"+req.body[i].label+"', '"+basedir+"')";
+    mysqlConnection.query(sql, (err, result) => {
+      if(err) throw err;
+      console.log("Inserido na tabela 'objeto'");
+    })
+  }
+
+
+         
 });
 
 //ver todos os pedidos

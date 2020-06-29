@@ -61,29 +61,21 @@ function useFeatures() {
   }
 }
 
+function enviarImages() {
+  var url = "http://localhost:4000/create/upload";
+
+
+}
+
 function abc() {
 
   var url = "http://localhost:4000/create";
-  
   const data = images;
-  const images2 = [
-    {
-      "id": "1",
-      "label": "Objeto 1",
-      "src": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD"
-    },
-    {
-      "id": "2",
-      "label": "Objeto 2",
-      "src": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD"
-    },
-  ];
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
   xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
   xhr.send(JSON.stringify(data)); 
-  
 }
 
 function gotResultUpload(nomeImage) {
@@ -176,6 +168,7 @@ function upload(id) {
               images.push({
                 id: id,
                 label: titulo,
+                name: file.name,
                 src: e.target.result,
               });
 
