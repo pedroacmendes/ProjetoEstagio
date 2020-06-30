@@ -53,18 +53,10 @@ function useFeatures() {
             inputSaida.setAttribute("onclick", "upload(0)");
             output.appendChild(inputSaida);
 
-            //limpar label
-
           }
         });
       });
   }
-}
-
-function enviarImages() {
-  var url = "http://localhost:4000/create/upload";
-
-
 }
 
 function abc() {

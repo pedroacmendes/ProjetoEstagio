@@ -21,7 +21,7 @@ router.use(function (req, res, next) {
 router.post('/create', function (req, res) {
 
   console.log("----------------funciona----------------");
-  
+
   var idPedido;
   
   var sql =  "INSERT INTO pedido (nome, data) VALUES ('Kyrios', NOW())";
@@ -33,7 +33,7 @@ router.post('/create', function (req, res) {
     var nObjetos = req.body.length;
   
     for (i = 0; i < nObjetos; i++){
-      console.log("I" + i);
+      //console.log("I" + i);
       var sql =  "INSERT INTO objeto (id_pedido, label) VALUES ("+ idPedido +", '"+req.body[i].label+"')";
       mysqlConnection.query(sql, (err, result) => {
         if (err) {
@@ -42,6 +42,8 @@ router.post('/create', function (req, res) {
         console.log("Inserido na tabela 'objeto'");
       });  
 
+      var obj = 1 + i;
+
       var image = req.body[i].src;
       var data = image.replace(/^data:image\/\w+;base64,/, '');
      
@@ -49,32 +51,26 @@ router.post('/create', function (req, res) {
       //Verifica se não existe
       if (!fs.existsSync(basedir)){
         //Efetua a criação do diretório
-        fs.mkdir(basedir, (err) => {
-          if (err) {
-            console.log("Deu erro -> " + err);
-          } else {
-            console.log("Diretório criado!")
-          }
-        });
+        fs.mkdir(basedir, (err) => {if (err) throw err; });
       }
-      
-      var basedir2 = basedir + "objeto " + i + "/";
+      var basedir2 = basedir + "objeto " + obj + "/";
       if (!fs.existsSync(basedir2)){
-        fs.mkdir(basedir2, (err) => {
-            if (err) {
-                console.log("Deu erro -> " + err);
-            } else {
-              console.log("Diretório criado!")
-            }
-        });
+        fs.mkdir(basedir2, (err) => {if (err) throw err; });
       }
-      
+     
       var basedir3 = basedir2 + req.body[i].name;
+      //escreve a imagem
       fs.writeFile(basedir3, data, {encoding: 'base64'}, function(err, data){
         if (err) {
           console.log('err', err);
         } 
       });  
+
+      var sql2 = "INSERT INTO imagens (id_objeto, src) VALUES ('"+ obj +"', '"+ basedir3 +"')";
+      mysqlConnection.query(sql2, (err, result) => {
+        if(err) throw err;
+        console.log("Inserido na tabela 'Imagens'");
+      }); 
 
     }
 
