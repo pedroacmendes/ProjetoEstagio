@@ -1,5 +1,5 @@
 const bodyParser = require('body-parser');
-const { Router } = require('express');
+const { Router, query } = require('express');
 const router = Router();
 const path = require("path");
 const mysqlConnection = require('../database');
@@ -17,58 +17,84 @@ router.use(function (req, res, next) {
   next();
 }); 
 
-//Página WEB
-/* router.get("/index", (req, res) => {
-  fs = require('fs');
-  fs.readFile('./src/public/index.html', function (err, html) {
-    if (err) {
-      throw err; 
-    }
-  res.writeHeader(200, {"Content-Type": "text/html"});  
-  res.write(html);  
-  res.end(); 
-  });
-}) */
-
 //Enviar pedido
 router.post('/create', function (req, res) {
 
   console.log("----------------funciona----------------");
-
-  var nomePedido = "Kyrios";
-
-  /* var sql =  "INSERT INTO pedido (nome, data) VALUES ('"+nomePedido+"', NOW())";
+  
+  var idPedido;
+  
+  var sql =  "INSERT INTO pedido (nome, data) VALUES ('Kyrios', NOW())";
   mysqlConnection.query(sql, (err, result) => {
     if(err) throw err;
     console.log("Inserido na tabela 'pedido'");
-  }) */
-
-  for (i = 0; i<= req.body.length; i++){
-    //console.log("count: " + count + "; id: " + i);
+    idPedido = JSON.stringify(result.insertId);
+   
+    var nObjetos = req.body.length;
   
-    var image = req.body[i].src;
-    var data = image.replace(/^data:image\/\w+;base64,/, '');
-    var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/" + req.body[i].name;
-    fs.writeFile(basedir, data, {encoding: 'base64'}, function(err, data){
-      if (err) {
-        console.log('err', err);
-      } 
-    }); 
-  
-    var sql =  "INSERT INTO objeto (idobjeto, label, src) VALUES ('"+req.body[i].id+"', '"+req.body[i].label+"', '"+basedir+"')";
-    mysqlConnection.query(sql, (err, result) => {
-      if(err) throw err;
-      console.log("Inserido na tabela 'objeto'");
-    })
-  }
+    for (i = 0; i < nObjetos; i++){
+      console.log("I" + i);
+      var sql =  "INSERT INTO objeto (id_pedido, label) VALUES ("+ idPedido +", '"+req.body[i].label+"')";
+      mysqlConnection.query(sql, (err, result) => {
+        if (err) {
+          console.log("erro -> " + err);
+        } 
+        console.log("Inserido na tabela 'objeto'");
+      });  
 
+      var image = req.body[i].src;
+      var data = image.replace(/^data:image\/\w+;base64,/, '');
+     
+      var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/pedido " + idPedido + "/"; 
+      //Verifica se não existe
+      if (!fs.existsSync(basedir)){
+        //Efetua a criação do diretório
+        fs.mkdir(basedir, (err) => {
+          if (err) {
+            console.log("Deu erro -> " + err);
+          } else {
+            console.log("Diretório criado!")
+          }
+        });
+      }
+      
+      var basedir2 = basedir + "objeto " + i + "/";
+      if (!fs.existsSync(basedir2)){
+        fs.mkdir(basedir2, (err) => {
+            if (err) {
+                console.log("Deu erro -> " + err);
+            } else {
+              console.log("Diretório criado!")
+            }
+        });
+      }
+      
+      var basedir3 = basedir2 + req.body[i].name;
+      fs.writeFile(basedir3, data, {encoding: 'base64'}, function(err, data){
+        if (err) {
+          console.log('err', err);
+        } 
+      });  
 
-         
+    }
+
+  }); 
+
 });
 
 //ver todos os pedidos
 router.get('/index/pedidos', (req, res) => {
   mysqlConnection.query("SELECT * FROM pedido", (err, rows, fields) => {
+    if(!err){
+      res.send(rows);
+    } else {
+      console.log(err);
+    }
+  })
+});
+
+router.get('/index/objeto', (req, res) => {
+  mysqlConnection.query("SELECT * FROM objeto", (err, rows, fields) => {
     if(!err){
       res.send(rows);
     } else {
