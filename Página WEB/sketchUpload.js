@@ -17,6 +17,7 @@ function useFeatures() {
       var img = new Image();
 
       img.src = images[i].src;
+
       img.setAttribute.width = this.width;
       img.setAttribute.height = this.height;
 
@@ -34,65 +35,37 @@ function useFeatures() {
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
     msgErroTreino();
   } else { 
-
+    alert ("Aguarde, estamos a processar a informção.");
     Promise.all(promises)
       .then(() => {
         console.log('Training.');
         classifier.train(lossValue => {
           if (lossValue) {
             // training
-            select('#loss').html('Perda: ' + lossValue);
+            console.log("perda: " + lossValue);
           } else {
-            select('#loss').html('Treino realizado!');
-
-            //add input de saida
-            var output = document.getElementById('output');
-            let inputSaida = document.createElement("input");
-            inputSaida.type = "file";
-            inputSaida.id = "inputSaida";
-            inputSaida.setAttribute("onclick", "upload(0)");
-            output.appendChild(inputSaida);
-
+            console.log("TREINO REALIZADO!");
+            //exportar
+            console.log(classifier);
+            //classifier.save();
           }
         });
       });
-  }
-}
-
-function abc() {
-
-  var url = "http://localhost:4000/create";
-  const data = images;
-
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", url);
-  xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhr.send(JSON.stringify(data)); 
-}
-
-function gotResultUpload(nomeImage) {
-  console.log(nomeImage);
-  var imgUp = new Image();
-  imgUp.src = nomeImage;
-
-  classifier.classify(imgUp, (err, result) => {
-    console.log(result);
-    if (err) {
-      console.error(err);
     }
-    console.log('rating: ' + result);
+  }
+  
+function abc() {
+    
+  useFeatures();
+    var url = "http://localhost:4000/recebeModel";
+    const data = classifier.save();
 
-    Object.keys(result).forEach((key) => {
-      console.log(key + ' -> ' + result[key]);
-
-      let label2 = document.createElement("label");
-      label2.innerHTML = result[key].label + " - " + result[key].confidence.toFixed(2) * 100 + '%' + "<br>";
-      document.getElementById("result").appendChild(label2);
-    })
-
-  });
-
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    xhr.send(JSON.stringify(data)); 
 }
+
 
 function upload(id) {
 
@@ -132,9 +105,9 @@ function upload(id) {
     }
   } else {
 
-    var titulo = document.getElementById("titulo" + id).firstChild;
-    titulo = titulo.nodeValue;
-    console.log(titulo);
+    var aaa = document.getElementById("titulo" + id).firstChild;
+    aaa = aaa.nodeValue;
+    console.log(aaa);
 
     var fileUpload = document.getElementById('fileupload' + id);
     fileUpload.onchange = function () {
@@ -159,8 +132,7 @@ function upload(id) {
 
               images.push({
                 id: id,
-                label: titulo,
-                name: file.name,
+                label: aaa,
                 src: e.target.result,
               });
 

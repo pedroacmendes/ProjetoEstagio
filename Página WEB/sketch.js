@@ -12,55 +12,11 @@ var classesT = [0, 0];
 function setup() {
     noCanvas();
     featureExtractor = ml5.featureExtractor('MobileNet');
-    //setupButtons();
 }
 
-function msgErroTreino() {
-    alert("Antes de treinar o modelo deve adicionar algumas imagens!"); 
+function msgErroTreino(){
+    alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
 }
-
-function msgErroExportar() {
-    alert("Antes de exportar o modelo deve treina-lo!"); 
-} 
-
-/* function setupButtons() {
-    // Train Button
-    train = select('#train');
-
-    train.mousePressed(function () {
-        if( JSON.stringify(classes)==JSON.stringify(classesT) ){
-            msgErroTreino();
-        } else { 
-            closeCameras();
-            classifier.train(function (lossValue) {
-                if (lossValue) {
-                    loss = lossValue;
-                    select('#loss').html('Perda: ' + loss);
-                } else {
-                    select('#loss').html('Treino realizado!');
-                }
-            });
-            video = createCapture(VIDEO);
-            video.parent('videoContainerX');
-            video.size(230, 230);
-            classify(); //start guessing´
-        }
-    });
-    
-    // Save model
-    saveBtn = select('#save');
-    saveBtn.mousePressed(function () {
-
-        if( JSON.stringify(classes)==JSON.stringify(classesT) ){
-            msgErroExportar();
-        } else { 
-        console.log("classifier");
-        console.log(classifier);
-        classifier.save();
-        }
-    });  
-
-}  */
 
 function addClass() {
     classes.push(0);
@@ -83,6 +39,7 @@ function addClass() {
     var btnAdd = document.createElement("BUTTON");
     var iconeAdd = document.createElement("i");
     var label = document.createElement("label");
+
 
     div.className = "camera";
     div.innerHTML = document.getElementById('getText').innerHTML;

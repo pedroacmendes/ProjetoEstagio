@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <title> Desenvolver Modelos </title>
     <h1>Desenvolver Modelos</h1>
-    <script type="text/javascript" src="p5.min.js"></script>
-    <script type="text/javascript" src="p5.dom.min.js"></script>
-    <script type="text/javascript" src="ml5.min.js"></script> 
-    <script type="text/javascript" src="sketch.js"></script>
-    <script type="text/javascript" src="sketchUpload.js"></script>
-    <script type="text/javascript" src="sketchCamera.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <link href="./style.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="p5.min.js"></script>
+    <script src="p5.dom.min.js"></script>
+    <script src="ml5.min.js"></script>
+    <script src="sketch.js"></script>
+    <script src="sketchUpload.js"></script>
+    <script src="sketchCamera.js"></script>
+
+    <!-- icones -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 
 <body>
@@ -24,8 +26,8 @@
                 <div class="titulo" id="titulo1" contenteditable="true">Objeto 1</div>
                 <hr>
                 <span id="amountOfClass1"> 0 Imagens adicionadas</span> <br><br>
-
                 <button id="1" onclick="camera1(1)"><i class="material-icons">camera_alt</i> Câmara </button>
+
 
                 <button id="buttonUpload">
                     <i class="material-icons">backup</i>
@@ -74,15 +76,12 @@
     </div>
 
     <div id="conteudo-2">
-
         <div id="section--output" class="box">
-
             <div class="output" id="output">
                 <h3> Deseja enviar o modelo para a App? </h3>
                 <hr>
                 <button onclick="abc()">Enviar Modelo</button>
             </div>      
-
         </div>
     </div>
 

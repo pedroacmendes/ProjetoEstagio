@@ -6,6 +6,8 @@ const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 const fs = require('fs');
 
+//const ml5 = require('../../../Página WEB/ml5.min.js');
+
 router.use(bodyParser.json({limit: '10mb', extended: true}))
 router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
@@ -16,6 +18,12 @@ router.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 }); 
+ 
+
+router.post('/recebeModel', function (req, res) {
+  console.log("this works");
+  console.log(req.body.file);
+})
 
 //Enviar pedido
 router.post('/create', function (req, res) {
@@ -34,43 +42,45 @@ router.post('/create', function (req, res) {
   
     for (i = 0; i < nObjetos; i++){
       //console.log("I" + i);
-      var sql =  "INSERT INTO objeto (id_pedido, label) VALUES ("+ idPedido +", '"+req.body[i].label+"')";
+      const index = i;
+      var sql =  "INSERT INTO objeto (id_pedido, label) VALUES ("+ idPedido +", '"+req.body[index].label+"')";
       mysqlConnection.query(sql, (err, result) => {
         if (err) {
           console.log("erro -> " + err);
         } 
         console.log("Inserido na tabela 'objeto'");
+        idObjeto = JSON.stringify(result.insertId);
+        console.log(index);
+        var image = req.body[index].src;
+        var data = image.replace(/^data:image\/\w+;base64,/, '');
+       
+        var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/pedido " + idPedido + "/"; 
+        //Verifica se não existe
+        if (!fs.existsSync(basedir)){
+          //Efetua a criação do diretório
+          fs.mkdir(basedir, (err) => {if (err) throw err; });
+        }
+        var basedir2 = basedir + "objeto " + idObjeto + "/";
+        if (!fs.existsSync(basedir2)){
+          fs.mkdir(basedir2, (err) => {if (err) throw err; });
+        }
+       
+        var basedir3 = basedir2 + req.body[index].name;
+        //escreve a imagem
+        fs.writeFile(basedir3, data, {encoding: 'base64'}, function(err, data){
+          if (err) {
+            console.log('err', err);
+          } 
+        });  
+  
+        var sql2 = "INSERT INTO imagens (id_objeto, src) VALUES ('"+ idObjeto +"', '"+ basedir3 +"')";
+        mysqlConnection.query(sql2, (err, result) => {
+          if(err) throw err;
+          console.log("Inserido na tabela 'Imagens'");
+        }); 
+
       });  
 
-      var obj = 1 + i;
-
-      var image = req.body[i].src;
-      var data = image.replace(/^data:image\/\w+;base64,/, '');
-     
-      var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/pedido " + idPedido + "/"; 
-      //Verifica se não existe
-      if (!fs.existsSync(basedir)){
-        //Efetua a criação do diretório
-        fs.mkdir(basedir, (err) => {if (err) throw err; });
-      }
-      var basedir2 = basedir + "objeto " + obj + "/";
-      if (!fs.existsSync(basedir2)){
-        fs.mkdir(basedir2, (err) => {if (err) throw err; });
-      }
-     
-      var basedir3 = basedir2 + req.body[i].name;
-      //escreve a imagem
-      fs.writeFile(basedir3, data, {encoding: 'base64'}, function(err, data){
-        if (err) {
-          console.log('err', err);
-        } 
-      });  
-
-      var sql2 = "INSERT INTO imagens (id_objeto, src) VALUES ('"+ obj +"', '"+ basedir3 +"')";
-      mysqlConnection.query(sql2, (err, result) => {
-        if(err) throw err;
-        console.log("Inserido na tabela 'Imagens'");
-      }); 
 
     }
 

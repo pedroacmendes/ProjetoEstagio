@@ -18,11 +18,6 @@ function camera1(id) {
     classifier = featureExtractor.classification(video, options);
 }
 
-// Classify the current frame.
-function classify() {
-    classifier.classify(gotResults);
-}
-
 function closeCameras(id) {
       video.hide(id);  
 }
@@ -35,18 +30,4 @@ function addSample(id) {
     console.log(classes);
     var id2 = id - 1;
     select('#amountOfClass' + id).html(classes[id2]++);
-}
-
-
-function gotResults(err, results) {
-
-    if (err) {
-        console.error(err);
-    }
-
-    if (results && results[0]) {
-        select('#result').html(results[0].label + " - " + results[0].confidence.toFixed(2) * 100 + '%');
-        classify();
-    }
-
 }
