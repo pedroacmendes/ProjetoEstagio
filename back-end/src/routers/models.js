@@ -6,8 +6,6 @@ const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 const fs = require('fs');
 
-//const ml5 = require('../../../Página WEB/ml5.min.js');
-
 router.use(bodyParser.json({limit: '10mb', extended: true}))
 router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
@@ -18,12 +16,18 @@ router.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 }); 
- 
 
 router.post('/recebeModel', function (req, res) {
   console.log("this works");
-  console.log(req.body.file);
-})
+
+  console.log(req.body);
+  res.send(req.body);
+
+  fs.writeFile("model.json", req.body, function (err) {
+    if (err) throw err;
+  }); 
+ 
+});
 
 //Enviar pedido
 router.post('/create', function (req, res) {
@@ -120,7 +124,6 @@ router.get('/index/objeto', (req, res) => {
 
 //ficheiro txt
 router.get('/labels', (req, res) => {
-  fs = require('fs');
   var filePath = path.join(__dirname, '../files/labels.txt');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {    
@@ -138,7 +141,6 @@ router.get('/labels', (req, res) => {
   
 //ficheiro tflite
 router.get('/model', (req, res) => {
-  fs = require('fs');
   var filePath = path.join(__dirname, '../files/converted_model.tflite');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {  

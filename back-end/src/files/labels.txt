@@ -1,9 +1,4 @@
 Banana
-Cão
-Laranja
-Caixote Lixo
-Caneca
-Comando
-Pessoa
+Lixo
 Computador
-Limão
+Comando

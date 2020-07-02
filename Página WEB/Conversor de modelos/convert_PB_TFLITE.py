@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-modelo_pb = 'C:\\Users\\Pedro Mendes\\Downloads\\modelo_keras'
+modelo_pb = 'C:\\Users\\Pedro Mendes\\Downloads\\keras'
 
 converter = tf.lite.TFLiteConverter.from_saved_model(modelo_pb, signature_keys=None, tags=None)
 

@@ -33,39 +33,40 @@ function useFeatures() {
   }
 
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
-    msgErroTreino();
+    alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
   } else { 
-    alert ("Aguarde, estamos a processar a informção.");
+    alert ("Aguarde, estamos a processar a informação.");
     Promise.all(promises)
       .then(() => {
         console.log('Training.');
         classifier.train(lossValue => {
           if (lossValue) {
-            // training
+            //training
             console.log("perda: " + lossValue);
           } else {
             console.log("TREINO REALIZADO!");
             //exportar
             console.log(classifier);
-            //classifier.save();
+            classifier.save();
           }
         });
       });
-    }
   }
-  
-function abc() {
-    
-  useFeatures();
-    var url = "http://localhost:4000/recebeModel";
-    const data = classifier.save();
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-    xhr.send(JSON.stringify(data)); 
 }
+  
+function sendModel() {
+  useFeatures();
+  var url = "http://localhost:4000/recebeModel";
 
+  var data = {"email": "hey@mail.com", "password": "101010"};
+
+  //var mydata = JSON.parse(model);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url);
+  xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  xhr.send(JSON.stringify(data)); 
+}
 
 function upload(id) {
 

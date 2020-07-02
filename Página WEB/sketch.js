@@ -14,10 +14,6 @@ function setup() {
     featureExtractor = ml5.featureExtractor('MobileNet');
 }
 
-function msgErroTreino(){
-    alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
-}
-
 function addClass() {
     classes.push(0);
     console.log(classes);
