@@ -6,6 +6,8 @@ const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 const fs = require('fs');
 
+var multer = require('multer');
+
 router.use(bodyParser.json({limit: '10mb', extended: true}))
 router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 
@@ -18,15 +20,17 @@ router.use(function (req, res, next) {
 }); 
 
 router.post('/recebeModel', function (req, res) {
+
   console.log("this works");
-
+  //res.send(req.body);
   console.log(req.body);
-  res.send(req.body);
+  var blob = JSON.stringify(req.body);
+  console.log(blob)
 
-  fs.writeFile("model.json", req.body, function (err) {
+  fs.writeFile("model.json", blob, function(err) {
     if (err) throw err;
-  }); 
- 
+  });
+
 });
 
 //Enviar pedido
@@ -84,8 +88,6 @@ router.post('/create', function (req, res) {
         }); 
 
       });  
-
-
     }
 
   }); 
@@ -112,6 +114,37 @@ router.get('/index/objeto', (req, res) => {
     }
   })
 });
+
+//
+//
+//
+// Para receber o modelo da pagina web
+//
+//
+//
+
+var storage = multer.diskStorage({ 
+  destination: function (req, file, cb) { 
+      cb(null, "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_pag-web") 
+  }, 
+  filename: function (req, file, cb) { 
+    cb(null, file.originalname) 
+  } 
+}) 
+
+var upload = multer({ storage: storage })
+
+router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
+  const files = req.files
+  if (!files) {
+    const error = new Error('Please choose files')
+    error.httpStatusCode = 400
+    return next(error)
+  }
+    res.send(files)
+    res.redirect("C:/Users/Pedro Mendes/Desktop/Projeto/Página WEB/index.html")
+})
+
 
 //
 //
@@ -154,6 +187,6 @@ router.get('/model', (req, res) => {
       res.end();
     }
   });     
-})
+});
 
 module.exports = router;

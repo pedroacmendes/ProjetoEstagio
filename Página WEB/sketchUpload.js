@@ -56,16 +56,16 @@ function useFeatures() {
   
 function sendModel() {
   useFeatures();
-  var url = "http://localhost:4000/recebeModel";
+  /* var url = "http://localhost:4000/recebeModel";
 
-  var data = {"email": "hey@mail.com", "password": "101010"};
+  var data = {"email": "hey@mail.com", "password": "111111"};
 
   //var mydata = JSON.parse(model);
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
   xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhr.send(JSON.stringify(data)); 
+  xhr.send(JSON.stringify(data));  */
 }
 
 function upload(id) {
