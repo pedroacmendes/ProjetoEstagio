@@ -25,7 +25,7 @@ router.post('/recebeModel', function (req, res) {
   //res.send(req.body);
   console.log(req.body);
   var blob = JSON.stringify(req.body);
-  console.log(blob)
+  console.log(blob);
 
   fs.writeFile("model.json", blob, function(err) {
     if (err) throw err;
@@ -125,25 +125,35 @@ router.get('/index/objeto', (req, res) => {
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) { 
-      cb(null, "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_pag-web") 
+      cb(null, "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs"); 
   }, 
   filename: function (req, file, cb) { 
-    cb(null, file.originalname) 
+    cb(null, file.originalname); 
   } 
 }) 
 
 var upload = multer({ storage: storage })
 
 router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
-  const files = req.files
+  const files = req.files;
   if (!files) {
-    const error = new Error('Please choose files')
-    error.httpStatusCode = 400
-    return next(error)
+    const error = new Error('Please choose files');
+    error.httpStatusCode = 400;
+    return next(error);
   }
-    res.send(files)
-    res.redirect("C:/Users/Pedro Mendes/Desktop/Projeto/Página WEB/index.html")
-})
+
+  const ps = require ('python-shell');
+  ps.PythonShell.run('./convert.py', null, (err, results) => {
+    if (err){
+      console.log("erro: " + err);
+    } else {
+      console.log("resultados: " + results);
+      res.end("file uploaded")
+    }
+  })
+
+  res.sendFile('C:/Users/Pedro Mendes/Desktop/Projeto/Página WEB/index.html');
+}); 
 
 
 //
@@ -154,10 +164,9 @@ router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
 //
 //
 
-
 //ficheiro txt
 router.get('/labels', (req, res) => {
-  var filePath = path.join(__dirname, '../files/labels.txt');
+  var filePath = path.join(__dirname, '../files/model-ready/labels.txt');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {    
     if(err){
@@ -174,7 +183,7 @@ router.get('/labels', (req, res) => {
   
 //ficheiro tflite
 router.get('/model', (req, res) => {
-  var filePath = path.join(__dirname, '../files/converted_model.tflite');
+  var filePath = path.join(__dirname, '../files/model-ready/converted_model.tflite');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {  
     if(err){

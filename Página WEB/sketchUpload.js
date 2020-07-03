@@ -53,7 +53,7 @@ function useFeatures() {
       });
   }
 }
-  
+
 function sendModel() {
   useFeatures();
   /* var url = "http://localhost:4000/recebeModel";
