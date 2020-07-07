@@ -5,8 +5,7 @@ const path = require("path");
 const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 const fs = require('fs');
-const ps = require('python-shell');
-
+let {PythonShell} =  require('python-shell');
 var multer = require('multer');
 
 router.use(bodyParser.json({limit: '10mb', extended: true}))
@@ -126,7 +125,7 @@ router.get('/index/objeto', (req, res) => {
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) { 
-      cb(null, "C:/Users/Pedro Mendes/Dropbox/Estágio/Projeto/back-end/src/files/modelo_tfjs"); 
+      cb(null, "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs"); 
   }, 
   filename: function (req, file, cb) { 
     cb(null, file.originalname); 
@@ -142,17 +141,37 @@ router.post('/upload', upload, (req, res, next) => {
     error.httpStatusCode = 400;
     return next(error);
   } else {
+
+    console.log("aqui 1");
     
-    ps.PythonShell.run('convert-model.py', null,(err) => {
-      if (err) {
-        console.log("erro: "+err);
-      } else {
-        console.log("Finished.");
-      }   
+    var options = {
+      mode: 'text',
+      pythonPath: 'C:/Users/Pedro Mendes/AppData/Local/Programs/Python/Python37/python.exe', 
+      pythonOptions: ['-u'],
+      // make sure you use an absolute path for scriptPath
+      //scriptPath: '/home/username/Test_Project/Python_Script_dir',
+      //args: ['value1', 'value2', 'value3']
+    };
+    
+
+    PythonShell.runString('x=1+1;print(x)', options, function (err) {
+      if (err) throw err;
+      console.log('finished');
     });
+
+    
+    /* PythonShell.PythonShell.run('convert.py', null, function (err, results) {
+      console.log("aqui 2");
+      if (err){
+        console.log("Erro: " + err);
+      } else{
+        console.log('convert.py finished.');
+      }
+    });  */
 
   }
 });  
+
 
 //
 //

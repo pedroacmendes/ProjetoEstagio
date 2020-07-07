@@ -5,8 +5,8 @@ from tensorflowjs.converters import keras_tfjs_loader
 from tensorflow.python.keras.utils import CustomObjectScope
 import json
 
-directory = 'C:/Users/Pedro Mendes/Dropbox/Estágio/Projeto/back-end/src/files/modelo_tfjs/';
-directory_final = 'C:/Users/Pedro Mendes/Dropbox/Estágio/Projeto/back-end/src/files/model-ready/';
+directory = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs/'
+directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/'
 
 def relu6(x):
     return K.relu(x, max_value=6) 
