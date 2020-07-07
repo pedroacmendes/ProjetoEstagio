@@ -5,6 +5,7 @@ const path = require("path");
 const mysqlConnection = require('../database');
 const { json } = require('body-parser');
 const fs = require('fs');
+const ps = require('python-shell');
 
 var multer = require('multer');
 
@@ -125,36 +126,33 @@ router.get('/index/objeto', (req, res) => {
 
 var storage = multer.diskStorage({ 
   destination: function (req, file, cb) { 
-      cb(null, "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs"); 
+      cb(null, "C:/Users/Pedro Mendes/Dropbox/Estágio/Projeto/back-end/src/files/modelo_tfjs"); 
   }, 
   filename: function (req, file, cb) { 
     cb(null, file.originalname); 
   } 
 }) 
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage }).array('myFiles', 2);
 
-router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
+router.post('/upload', upload, (req, res, next) => {
   const files = req.files;
   if (!files) {
     const error = new Error('Please choose files');
     error.httpStatusCode = 400;
     return next(error);
+  } else {
+    
+    ps.PythonShell.run('convert-model.py', null,(err) => {
+      if (err) {
+        console.log("erro: "+err);
+      } else {
+        console.log("Finished.");
+      }   
+    });
+
   }
-
-  const ps = require ('python-shell');
-  ps.PythonShell.run('./convert.py', null, (err, results) => {
-    if (err){
-      console.log("erro: " + err);
-    } else {
-      console.log("resultados: " + results);
-      res.end("file uploaded")
-    }
-  })
-
-  res.sendFile('C:/Users/Pedro Mendes/Desktop/Projeto/Página WEB/index.html');
-}); 
-
+});  
 
 //
 //
@@ -163,6 +161,7 @@ router.post('/upload', upload.array('myFiles', 12), (req, res, next) => {
 //
 //
 //
+
 
 //ficheiro txt
 router.get('/labels', (req, res) => {
