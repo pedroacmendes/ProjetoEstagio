@@ -11,6 +11,19 @@ directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/mode
 def relu6(x):
     return K.relu(x, max_value=6) 
 
+with open(directory+'model.json') as json_file:
+    data = json.load(json_file)
+    labelsI = data['ml5Specs']['mapStringToIndex']
+    labelsF = []
+    count = 0 
+    for l in labelsI:
+        name = '%d %s' % (count, l)
+        labelsF.append(name)
+        count = count + 1
+    print(labelsF)
+    with open (directory_final+'labels.txt', 'w') as outfile:
+        json.dump(labelsF, outfile)
+
 with tensorflow.Graph().as_default(), tensorflow.Session(), CustomObjectScope({'relu6': relu6}):
     model = keras_tfjs_loader.load_keras_model(directory + 'model.json')
     model.save(directory + 'model.h5')
