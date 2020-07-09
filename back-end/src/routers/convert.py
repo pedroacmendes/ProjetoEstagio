@@ -17,12 +17,13 @@ with open(directory+'model.json') as json_file:
     labelsF = []
     count = 0 
     for l in labelsI:
-        name = '%d %s' % (count, l)
+        name = '%s' % (l)
         labelsF.append(name)
         count = count + 1
-    print(labelsF)
+    print(labelsF[0])
     with open (directory_final+'labels.txt', 'w') as outfile:
-        json.dump(labelsF, outfile)
+        for line in labelsF:
+            outfile.write("".join(line) + "\n")
 
 with tensorflow.Graph().as_default(), tensorflow.Session(), CustomObjectScope({'relu6': relu6}):
     model = keras_tfjs_loader.load_keras_model(directory + 'model.json')

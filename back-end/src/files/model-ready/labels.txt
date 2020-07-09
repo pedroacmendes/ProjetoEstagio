@@ -1,4 +1,2 @@
-0 Cao
-1 Banana 
-2 Pessoa 
-3 Caneca
+mao
+livro
