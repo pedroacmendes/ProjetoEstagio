@@ -33,7 +33,7 @@ function useFeatures() {
   }
 
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
-    alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
+    alert("Não pode enviar o  o sem adicionar as imagens previamente.");
   } else { 
     alert ("Aguarde, estamos a processar a informação.");
     Promise.all(promises)
@@ -56,16 +56,13 @@ function useFeatures() {
 
 function sendModel() {
   useFeatures();
-  /* var url = "http://localhost:4000/recebeModel";
-
-  var data = {"email": "hey@mail.com", "password": "111111"};
-
-  //var mydata = JSON.parse(model);
+  var url = "http://localhost:4000/create";
+  const data = images;  
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
   xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhr.send(JSON.stringify(data));  */
+  xhr.send(JSON.stringify(data));  
 }
 
 function upload(id) {
@@ -110,6 +107,9 @@ function upload(id) {
     aaa = aaa.nodeValue;
     console.log(aaa);
 
+    var descr = document.getElementById("descricao" + id).value;
+    console.log(descr);
+
     var fileUpload = document.getElementById('fileupload' + id);
     fileUpload.onchange = function () {
       if (typeof (FileReader) != "undefined") {
@@ -130,13 +130,18 @@ function upload(id) {
 
               var id2 = id - 1;
               select('#amountOfClass' + id).html(classes[id2]++);
+              
+              let nome = file.name;
 
               images.push({
                 id: id,
                 label: aaa,
+                descricao: descr,
+                name: nome, 
                 src: e.target.result,
               });
-
+              
+              nome = "";
               console.log(images);
             }
             reader.readAsDataURL(file);

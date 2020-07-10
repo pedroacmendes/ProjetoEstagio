@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title> Desenvolver Modelos </title>
     <h1>Desenvolver Modelos</h1>
-    <link href="style.css" rel="stylesheet">  
+    <link href="style.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js" type="text/javascript"></script>
     <script src="sketch.js"></script>
     <script src="sketchUpload.js"></script>
-    <script src="sketchCamera.js"></script>  
+    <script src="sketchCamera.js"></script>
     <!-- icones -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -24,9 +24,12 @@
             <div class="camera">
                 <div class="titulo" id="titulo1" contenteditable="true">Objeto 1</div>
                 <hr>
-                <span id="amountOfClass1"> 0 Imagens adicionadas</span> <br><br>
-                <button id="1" onclick="camera1(1)"><i class="material-icons">camera_alt</i> Câmara </button>
+                <span id="amountOfClass1"> 0 Imagens adicionadas</span> <br>
 
+                <div class="descricao">
+                    <textarea type="text" id="descricao1" rows="3" cols="40"></textarea>
+                </div>
+                <button id="1" onclick="camera1(1)"><i class="material-icons">camera_alt</i> Câmara </button>
 
                 <button id="buttonUpload">
                     <i class="material-icons">backup</i>
@@ -46,7 +49,12 @@
             <div class="camera">
                 <div class="titulo" id="titulo2" contenteditable="true">Objeto 2</div>
                 <hr>
-                <span id="amountOfClass2"> 0 Imagens adicionadas</span> <br><br>
+                <span id="amountOfClass2"> 0 Imagens adicionadas</span> <br>
+
+                <div class="descricao">
+                    <textarea type="text" id="descricao2" rows="3" cols="40">Descrição</textarea>
+                </div>
+
                 <button id="2" onclick="camera1(2)"><i class="material-icons">camera_alt</i> Câmara </button>
 
 
@@ -75,22 +83,23 @@
     </div>
 
     <div id="conteudo-2">
-    
+
         <div id="section--output" class="box">
             <div class="output" id="output">
                 <h3> Deseja receber o modelo? </h3>
                 <hr>
                 <button onclick="sendModel()">Receber Modelo</button>
+
+                <form action="http://localhost:4000/upload" enctype="multipart/form-data" method="POST">
+                  
+                    <input type="file" id="myFiles" name="myFiles" multiple>
+                    <Button>Enviar Modelo</Button>
+                  
+                </form>
             </div>
+
         </div>
-            
-        <br><br>
-                
-        <form action="http://localhost:4000/upload" enctype="multipart/form-data" method="POST">
-            <input type="file" name="myFiles" multiple> <br><br>
-            <button> Enviar ficheiros </button>
-        </form>
-    
+
     </div>
 
 </body>

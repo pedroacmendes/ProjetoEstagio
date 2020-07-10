@@ -26,6 +26,10 @@ div.titulo {
     font-size: 20px;
 }
 
+div.descricao {
+    padding: 10px;
+}
+
 #conteudo-2 {
     float: right;
     width: 35%;

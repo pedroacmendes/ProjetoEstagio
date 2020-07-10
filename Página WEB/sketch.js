@@ -25,6 +25,8 @@ function addClass() {
     var hr = document.createElement("hr");
     var br = document.createElement("br");
     var span = document.createElement("span");
+    var divDesc = document.createElement('div');
+    var textareaDesc = document.createElement('textarea');
     var btnCamera = document.createElement("BUTTON");
     var iconeCame = document.createElement("i");
     var labelCame = document.createElement("label");
@@ -36,7 +38,6 @@ function addClass() {
     var iconeAdd = document.createElement("i");
     var label = document.createElement("label");
 
-
     div.className = "camera";
     div.innerHTML = document.getElementById('getText').innerHTML;
 
@@ -47,6 +48,16 @@ function addClass() {
 
     span.innerHTML = "0 Imagens adicionadas";
     span.id = "amountOfClass" + classID;
+
+    divDesc.className = "descricao";
+
+    textareaDesc.innerHTML = "Descrição";
+    textareaDesc.id = "descricao" + classID;
+    textareaDesc.setAttribute("type", "text");
+    textareaDesc.rows = "3";
+    textareaDesc.cols = "40";
+
+    divDesc.innerHTML += textareaDesc.outerHTML;
 
     btnCamera.id = classID;
     btnCamera.setAttribute("onclick", "camera1(" + classID + ")");
@@ -74,7 +85,7 @@ function addClass() {
 
     divCamera.id = "videoContainer" + classID;
 
-    div.innerHTML += titulo.outerHTML + hr.outerHTML + span.outerHTML + br.outerHTML + br.outerHTML + btnCamera.outerHTML + btnAdd.outerHTML + dvScroll.outerHTML + divCamera.outerHTML/*  + btnAdd.outerHTML */;
+    div.innerHTML += titulo.outerHTML + hr.outerHTML + span.outerHTML + br.outerHTML + divDesc.outerHTML + btnCamera.outerHTML + btnAdd.outerHTML + dvScroll.outerHTML + divCamera.outerHTML/*  + btnAdd.outerHTML */;
 
     document.getElementById("section--input").appendChild(br);
     document.getElementById("section--input").appendChild(div);

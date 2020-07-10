@@ -4,14 +4,31 @@ import tensorflow
 from tensorflowjs.converters import keras_tfjs_loader
 from tensorflow.python.keras.utils import CustomObjectScope
 import json
+import os
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="root",
+  database="pedidos-modelo"
+)
+
+mycursor = mydb.cursor()
+mycursor.execute("SELECT MAX(id_pedido) FROM pedido")
+myresult = mycursor.fetchone()
+print(myresult)
+result = format(myresult[0]) 
+a = '%s' '%s' % ('Pedido ', result)
 
 directory = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs/'
-directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/'
+directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/' + a + '/'
+os.mkdir(directory_final)
 
 def relu6(x):
     return K.relu(x, max_value=6) 
 
-with open(directory+'model.json') as json_file:
+with open(directory + 'model.json') as json_file:
     data = json.load(json_file)
     labelsI = data['ml5Specs']['mapStringToIndex']
     labelsF = []
@@ -20,8 +37,8 @@ with open(directory+'model.json') as json_file:
         name = '%s' % (l)
         labelsF.append(name)
         count = count + 1
-    print(labelsF[0])
-    with open (directory_final+'labels.txt', 'w') as outfile:
+    print(labelsF)
+    with open (directory_final + 'labels.txt', 'w') as outfile:
         for line in labelsF:
             outfile.write("".join(line) + "\n")
 

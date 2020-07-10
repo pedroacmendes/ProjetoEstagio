@@ -8,8 +8,8 @@ const fs = require('fs');
 const {PythonShell} =  require('python-shell');
 var multer = require('multer');
 
-router.use(bodyParser.json({limit: '10mb', extended: true}))
-router.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
+router.use(bodyParser.json({limit: '50mb', extended: true}))
+router.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
 router.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,47 +19,46 @@ router.use(function (req, res, next) {
   next();
 }); 
 
-router.post('/recebeModel', function (req, res) {
-
-  console.log("this works");
-  //res.send(req.body);
-  console.log(req.body);
-  var blob = JSON.stringify(req.body);
-  console.log(blob);
-
-  fs.writeFile("model.json", blob, function(err) {
-    if (err) throw err;
-  });
-
-});
-
-//Enviar pedido
+//
+//
+//
+//Guardar todas as informações de 1 pedido, objetos e imagens na base de dados
+//
+//
+//
 router.post('/create', function (req, res) {
 
   console.log("----------------funciona----------------");
 
   var idPedido;
   
-  var sql =  "INSERT INTO pedido (nome, data) VALUES ('Kyrios', NOW())";
+  var sql =  "INSERT INTO pedido (nome, data, file_tflite, file_txt) VALUES ('Kyrios', NOW(), 'A', 'B')";
   mysqlConnection.query(sql, (err, result) => {
     if(err) throw err;
     console.log("Inserido na tabela 'pedido'");
     idPedido = JSON.stringify(result.insertId);
+    var pathmodel = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/' + idPedido + '/converted_model.tflite';
+    var pathlabel = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/' + idPedido + '/labels.txt';
+
+    var sql = "UPDATE pedido SET file_tflite = '"+pathmodel+"', file_txt = '"+pathlabel+"' WHERE id_pedido = '"+idPedido+"' ";
+    mysqlConnection.query(sql, (err, result) => {
+      if (err) throw err;
+    });
    
     var nObjetos = req.body.length;
   
     for (i = 0; i < nObjetos; i++){
       //console.log("I" + i);
       const index = i;
-      var sql =  "INSERT INTO objeto (id_pedido, label) VALUES ("+ idPedido +", '"+req.body[index].label+"')";
+      var sql =  "INSERT INTO objeto (id_pedido, label, descricao) VALUES ("+ idPedido +", '"+req.body[index].label+"', '"+req.body[index].descricao+"')";
       mysqlConnection.query(sql, (err, result) => {
         if (err) {
           console.log("erro -> " + err);
         } 
         console.log("Inserido na tabela 'objeto'");
         idObjeto = JSON.stringify(result.insertId);
-        console.log(index);
-        var image = req.body[index].src;
+        //console.log(index);
+        /* var image = req.body[index].src;
         var data = image.replace(/^data:image\/\w+;base64,/, '');
        
         var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/pedido " + idPedido + "/"; 
@@ -72,7 +71,6 @@ router.post('/create', function (req, res) {
         if (!fs.existsSync(basedir2)){
           fs.mkdir(basedir2, (err) => {if (err) throw err; });
         }
-       
         var basedir3 = basedir2 + req.body[index].name;
         //escreve a imagem
         fs.writeFile(basedir3, data, {encoding: 'base64'}, function(err, data){
@@ -85,7 +83,7 @@ router.post('/create', function (req, res) {
         mysqlConnection.query(sql2, (err, result) => {
           if(err) throw err;
           console.log("Inserido na tabela 'Imagens'");
-        }); 
+        });  */
 
       });  
     }
@@ -94,7 +92,13 @@ router.post('/create', function (req, res) {
 
 });
 
+//
+//
+//
 //ver todos os pedidos
+//
+//
+//
 router.get('/index/pedidos', (req, res) => {
   mysqlConnection.query("SELECT * FROM pedido", (err, rows, fields) => {
     if(!err){
@@ -105,20 +109,10 @@ router.get('/index/pedidos', (req, res) => {
   })
 });
 
-router.get('/index/objeto', (req, res) => {
-  mysqlConnection.query("SELECT * FROM objeto", (err, rows, fields) => {
-    if(!err){
-      res.send(rows);
-    } else {
-      console.log(err);
-    }
-  })
-});
-
 //
 //
 //
-// Para receber o modelo da pagina web
+// Para receber o modelo da pagina web e converter
 //
 //
 //
@@ -163,7 +157,7 @@ router.post('/upload', upload, (req, res, next) => {
 
 //ficheiro txt
 router.get('/labels', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/labels.txt');
+  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/labels.txt');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {    
     if(err){
@@ -180,7 +174,7 @@ router.get('/labels', (req, res) => {
   
 //ficheiro tflite
 router.get('/model', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/converted_model.tflite');
+  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/converted_model.tflite');
     
   var file = fs.readFile(filePath, 'binary', (err, data) => {  
     if(err){
