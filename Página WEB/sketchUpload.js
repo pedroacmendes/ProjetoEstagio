@@ -10,30 +10,12 @@ function useFeatures() {
   classifier.config.learningRate = 0.001;
 
   console.log(classifier.config);
+  console.log("tamanho: " + images.length);
 
-  for (var i = 0; i < images.length; i++) {
-
-    promises[i] = new Promise(resolve => {
-      var img = new Image();
-
-      img.src = images[i].src;
-
-      img.setAttribute.width = this.width;
-      img.setAttribute.height = this.height;
-
-      let label = images[i].label;
-
-      classifier.addImage(img, label, () => {
-        resolve();
-        img = null;
-        console.log(i, " - ", label);
-      });
-
-    });
-  }
+  addImages();
 
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
-    alert("Não pode enviar o  o sem adicionar as imagens previamente.");
+    alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
   } else { 
     alert ("Aguarde, estamos a processar a informação.");
     Promise.all(promises)
@@ -51,7 +33,31 @@ function useFeatures() {
           }
         });
       });
-  }
+  } 
+}
+
+function addImages(){
+  //este ciclo percorre os objetos
+  for (let i = 0; i < images.length; i++) {
+
+    let label = images[i].label;
+    
+    //este ciclo percorre as imagens
+    for (let j = 0; j < images[i].src.length; j++){
+      promises[i] = new Promise(resolve => {
+        
+        var img = new Image(this.width, this.height);     
+     
+        img.src = images[i].src[j];
+        
+        classifier.addImage(img, label, () => {
+          resolve();
+          img = null;
+        });
+
+      });
+    }  
+  } 
 }
 
 function sendModel() {
@@ -62,7 +68,7 @@ function sendModel() {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
   xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhr.send(JSON.stringify(data));  
+  xhr.send(JSON.stringify(data));   
 }
 
 function upload(id) {
@@ -110,6 +116,8 @@ function upload(id) {
     var descr = document.getElementById("descricao" + id).value;
     console.log(descr);
 
+    images2 = [];
+
     var fileUpload = document.getElementById('fileupload' + id);
     fileUpload.onchange = function () {
       if (typeof (FileReader) != "undefined") {
@@ -131,18 +139,10 @@ function upload(id) {
               var id2 = id - 1;
               select('#amountOfClass' + id).html(classes[id2]++);
               
-              let nome = file.name;
+              const x = e.target.result;
 
-              images.push({
-                id: id,
-                label: aaa,
-                descricao: descr,
-                name: nome, 
-                src: e.target.result,
-              });
-              
-              nome = "";
-              console.log(images);
+              images2.push(x);
+                          
             }
             reader.readAsDataURL(file);
           } else {
@@ -155,5 +155,14 @@ function upload(id) {
         alert("This browser does not support HTML5 FileReader.");
       }
     }
+
+    images.push({
+      id: id,
+      label: aaa,
+      descricao: descr,
+      src: images2,
+    });
+    console.log(images);
+
   }
 }

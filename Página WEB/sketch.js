@@ -1,5 +1,6 @@
 const promises = [];
 let images = [];
+let images2 = [];
 let featureExtractor;
 let classifier;
 let nomeImage = "";

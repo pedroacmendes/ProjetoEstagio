@@ -42,6 +42,15 @@ with open(directory + 'model.json') as json_file:
         for line in labelsF:
             outfile.write("".join(line) + "\n")
 
+mycursor2 = mydb.cursor()
+mycursor2.execute("SELECT descricao FROM objeto WHERE id_pedido = '"+result+"';")
+myresult2 = mycursor2.fetchall()
+for x in myresult2:
+    print(myresult2)
+with open (directory_final + 'descricao.txt', 'w') as outfile:
+        for line in myresult2:
+            outfile.write("".join(line) + "\n")
+
 with tensorflow.Graph().as_default(), tensorflow.Session(), CustomObjectScope({'relu6': relu6}):
     model = keras_tfjs_loader.load_keras_model(directory + 'model.json')
     model.save(directory + 'model.h5')

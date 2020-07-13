@@ -177,6 +177,23 @@ router.get('/labels', (req, res) => {
     }
   });
 })
+
+//ficheiro desc
+router.get('/descricao', (req, res) => {
+  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/descricao.txt');
+    
+  var file = fs.readFile(filePath, 'binary', (err, data) => {    
+    if(err){
+      return console.log(err);
+    } else {
+      res.setHeader('Content-Length', data.length);
+      res.setHeader('Content-Type', 'file/txt');
+      res.setHeader('Content-Disposition', 'attachment; filename="decricacao.txt"');
+      res.write(data, 'binary');
+      res.end();
+    }
+  });
+})
   
 //ficheiro tflite
 router.get('/model', (req, res) => {
@@ -210,6 +227,23 @@ router.get('/labels2', (req, res) => {
       res.setHeader('Content-Length', data.length);
       res.setHeader('Content-Type', 'file/txt');
       res.setHeader('Content-Disposition', 'attachment; filename="labels.txt"');
+      res.write(data, 'binary');
+      res.end();
+    }
+  });
+})
+
+//ficheiro desc
+router.get('/descricao2', (req, res) => {
+  var filePath = path.join(__dirname, '../files/model-ready/Pedido 2/descricao.txt');
+    
+  var file = fs.readFile(filePath, 'binary', (err, data) => {    
+    if(err){
+      return console.log(err);
+    } else {
+      res.setHeader('Content-Length', data.length);
+      res.setHeader('Content-Type', 'file/txt');
+      res.setHeader('Content-Disposition', 'attachment; filename="decricacao.txt"');
       res.write(data, 'binary');
       res.end();
     }
