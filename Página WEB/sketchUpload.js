@@ -117,6 +117,7 @@ function upload(id) {
     console.log(descr);
 
     images2 = [];
+    images3 = [];
 
     var fileUpload = document.getElementById('fileupload' + id);
     fileUpload.onchange = function () {
@@ -140,10 +141,11 @@ function upload(id) {
               select('#amountOfClass' + id).html(classes[id2]++);
               
               const x = e.target.result;
-
               images2.push(x);
-                          
+
             }
+            var nome = file.name;
+            images3.push(nome);
             reader.readAsDataURL(file);
           } else {
             alert(file.name + " is not a valid image file.");
@@ -160,6 +162,7 @@ function upload(id) {
       id: id,
       label: aaa,
       descricao: descr,
+      nome: images3,
       src: images2,
     });
     console.log(images);
