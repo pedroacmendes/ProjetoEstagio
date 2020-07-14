@@ -19,10 +19,9 @@ mycursor.execute("SELECT MAX(id_pedido) FROM pedido")
 myresult = mycursor.fetchone()
 print(myresult)
 result = format(myresult[0]) 
-a = '%s' '%s' % ('Pedido ', result)
 
 directory = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/modelo_tfjs/'
-directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/' + a + '/'
+directory_final = 'C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/model-ready/' + result + '/'
 os.mkdir(directory_final)
 
 def relu6(x):

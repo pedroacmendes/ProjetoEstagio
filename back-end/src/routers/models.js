@@ -60,13 +60,13 @@ router.post('/create', function (req, res) {
         idObjeto = JSON.stringify(result.insertId);
 
         
-        var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/pedido " + idPedido + "/"; 
+        var basedir = "C:/Users/Pedro Mendes/Desktop/Projeto/back-end/src/files/uploads/" + idPedido + "/"; 
         //Verifica se não existe
         if (!fs.existsSync(basedir)){
           //Efetua a criação do diretório
           fs.mkdir(basedir, (err) => {if (err) throw err; });
         }
-        var basedir2 = basedir + req.body[index] + "/";
+        var basedir2 = basedir + req.body[index].label + "/"; 
         if (!fs.existsSync(basedir2)){
           fs.mkdir(basedir2, (err) => {if (err) throw err; });
         }
@@ -165,112 +165,88 @@ router.post('/upload', upload, (req, res, next) => {
 //  ----------------------------------------------------------------------------------------------------
 //  ----------------------------------------------------------------------------------------------------
 
+//ficheiro desc
+router.get('/listarPedidos', (req, res) => {
+  var obj = [];
+  var sql =  "SELECT * FROM pedido;";
+  mysqlConnection.query(sql, (err, result) => {
+    if(err) throw err;
+    obj.push(result);
+    var json = JSON.stringify(obj);
+    res.end(json);
+  });
+})
 
 
 //ficheiro txt
-router.get('/labels', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/labels.txt');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {    
-    if(err){
-      return console.log(err);
-    } else {
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/txt');
-      res.setHeader('Content-Disposition', 'attachment; filename="labels.txt"');
-      res.write(data, 'binary');
-      res.end();
-    }
+router.get('/labels/:id', (req, res) => {
+
+  var id = req.params.id;
+
+  var sql =  "SELECT file_txt FROM pedido WHERE id_pedido = '"+id+"';";
+  mysqlConnection.query(sql, (err, result) => {
+    if(err) throw err;
+ 
+    var filepath = result[0]['file_txt'];
+    console.log(filepath);
+  
+    var file = fs.readFile(filepath, 'binary', (err, data) => {    
+      if(err){
+        return console.log(err);
+      } else {
+        res.setHeader('Content-Length', data.length);
+        res.setHeader('Content-Type', 'file/txt');
+        res.setHeader('Content-Disposition', 'attachment; filename="labels.txt"');
+        res.write(data, 'binary');
+        res.end();
+      }
+    });  
+
   });
+
 })
 
 //ficheiro desc
-router.get('/descricao', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/descricao.txt');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {    
-    if(err){
-      return console.log(err);
-    } else {
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/txt');
-      res.setHeader('Content-Disposition', 'attachment; filename="decricacao.txt"');
-      res.write(data, 'binary');
-      res.end();
-    }
+router.get('/descricao/:id', (req, res) => {
+  var obj = [];
+  var id = req.params.id;
+
+  var sql =  "SELECT descricao, label FROM objeto WHERE id_pedido = '"+id+"';";
+  mysqlConnection.query(sql, (err, result) => {
+    if(err) throw err;
+    obj.push(result);
+    var json = JSON.stringify(obj);
+    console.log("objeto: " + json );
+    res.end(json);
   });
+
 })
   
 //ficheiro tflite
-router.get('/model', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 1/converted_model.tflite');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {  
-    if(err){
-      return console.log(err);
-    } else {  
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/tflite');
-      res.setHeader('Content-Disposition', 'attachment; filename="converted_model.tflite"');
-      res.write(data, 'binary');
-      res.end();
-    }
-  });     
-});
+router.get('/model/:id', (req, res) => {
 
-//  ----------------------------------------------------------------------------------------------------
-//  ----------------------------------------------------------------------------------------------------
-//  ----------------------------------------------------------------------------------------------------
+  var id = req.params.id;
 
-//ficheiro txt
-router.get('/labels2', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 2/labels.txt');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {    
-    if(err){
-      return console.log(err);
-    } else {
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/txt');
-      res.setHeader('Content-Disposition', 'attachment; filename="labels.txt"');
-      res.write(data, 'binary');
-      res.end();
-    }
-  });
-})
+  var sql =  "SELECT file_tflite FROM pedido WHERE id_pedido = '"+id+"';";
+  mysqlConnection.query(sql, (err, result) => {
+    if(err) throw err;
+ 
+    var filepath = result[0]['file_tflite'];
+    console.log(filepath);
 
-//ficheiro desc
-router.get('/descricao2', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 2/descricao.txt');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {    
-    if(err){
-      return console.log(err);
-    } else {
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/txt');
-      res.setHeader('Content-Disposition', 'attachment; filename="decricacao.txt"');
-      res.write(data, 'binary');
-      res.end();
-    }
-  });
-})
-  
-//ficheiro tflite
-router.get('/model2', (req, res) => {
-  var filePath = path.join(__dirname, '../files/model-ready/Pedido 2/converted_model.tflite');
-    
-  var file = fs.readFile(filePath, 'binary', (err, data) => {  
-    if(err){
-      return console.log(err);
-    } else {  
-      res.setHeader('Content-Length', data.length);
-      res.setHeader('Content-Type', 'file/tflite');
-      res.setHeader('Content-Disposition', 'attachment; filename="converted_model.tflite"');
-      res.write(data, 'binary');
-      res.end();
-    }
-  });     
+    var file = fs.readFile(filepath, 'binary', (err, data) => {  
+      if(err){
+        return console.log(err);
+      } else {  
+        res.setHeader('Content-Length', data.length);
+        res.setHeader('Content-Type', 'file/tflite');
+        res.setHeader('Content-Disposition', 'attachment; filename="converted_model.tflite"');
+        res.write(data, 'binary');
+        res.end();
+      }
+    }); 
+
+  });    
 });
 
 module.exports = router;
