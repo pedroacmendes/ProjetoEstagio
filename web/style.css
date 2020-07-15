@@ -67,6 +67,14 @@ div.descricao {
     background-image: url(plus.png);
 }
 
+.main {
+    position: fixed;
+    float: center;
+    margin-top: 8%;
+    left: 45%;
+    right: 45%;
+}
+
 .output {
     border-radius: 10px;
     box-shadow: 1px 1px 5px grey;

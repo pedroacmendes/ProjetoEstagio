@@ -17,7 +17,11 @@
 
 </head>
 
-<body>
+<img id="img" class="main" />
+
+<body id="body">
+
+
     <div id="conteudo-1">
         <div id="section--input" class="box">
 
@@ -82,6 +86,7 @@
 
     </div>
 
+
     <div id="conteudo-2">
 
         <div id="section--output" class="box">
@@ -91,11 +96,10 @@
                 <button onclick="sendModel()">Receber Modelo</button>
 
                 <form action="http://localhost:4000/upload" enctype="multipart/form-data" method="POST">
-                  
                     <input type="file" id="myFiles" name="myFiles" multiple>
                     <Button>Enviar Modelo</Button>
-                  
                 </form>
+                
             </div>
 
         </div>

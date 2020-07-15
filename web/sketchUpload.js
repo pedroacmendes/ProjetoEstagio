@@ -1,5 +1,5 @@
 function useFeatures() {
-
+  
   classifier = featureExtractor.classification();
   console.log(classifier.config);
 
@@ -17,7 +17,6 @@ function useFeatures() {
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
     alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
   } else { 
-    alert ("Aguarde, estamos a processar a informação.");
     Promise.all(promises)
       .then(() => {
         console.log('Training.');
@@ -30,10 +29,12 @@ function useFeatures() {
             //exportar
             console.log(classifier);
             classifier.save();
+            paraGif();
           }
         });
       });
   } 
+
 }
 
 function addImages(){
@@ -60,7 +61,23 @@ function addImages(){
   } 
 }
 
+function comecaGif() {
+  var img = document.getElementById('img');
+  img.style.display = "inline";
+  img.src = 'loading.gif';
+  var body = document.getElementById('body');
+  body.style.opacity = "0.4";
+}
+
+function paraGif() {
+  var img = document.getElementById('img');
+  img.style.display = "none";
+  var body = document.getElementById('body');
+  body.style.opacity = "1";
+}
+
 function sendModel() {
+  comecaGif();
   useFeatures();
   var url = "http://localhost:4000/create";
   const data = images;  
