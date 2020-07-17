@@ -52,7 +52,7 @@ function addClass() {
 
     divDesc.className = "descricao";
 
-    textareaDesc.innerHTML = "Descrição";
+    textareaDesc.innerHTML = "Descrição " + classID;
     textareaDesc.id = "descricao" + classID;
     textareaDesc.setAttribute("type", "text");
     textareaDesc.rows = "3";

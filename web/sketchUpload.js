@@ -1,42 +1,41 @@
 function useFeatures() {
-  
+    
   classifier = featureExtractor.classification();
-  console.log(classifier.config);
-
+  
   //opçoes do treino
   classifier.config.numLabels = classID;
   classifier.config.epochs = 50;
   classifier.config.batchSize = 16;
   classifier.config.learningRate = 0.001;
-
+  
   console.log(classifier.config);
   console.log("tamanho: " + images.length);
-
+  
   addImages();
-
+  
   if( JSON.stringify(classes)==JSON.stringify(classesT) ){
     alert("Não pode enviar o modelo sem adicionar as imagens previamente.");
   } else { 
     Promise.all(promises)
-      .then(() => {
-        console.log('Training.');
-        classifier.train(lossValue => {
-          if (lossValue) {
-            //training
-            console.log("perda: " + lossValue);
-          } else {
-            console.log("TREINO REALIZADO!");
-            //exportar
-            console.log(classifier);
-            classifier.save();
-            paraGif();
-          }
-        });
+    .then(() => {
+      console.log('Training.');
+      classifier.train(lossValue => {
+        if (lossValue) {
+          //training
+          console.log("perda: " + lossValue);
+        } else {
+          console.log("TREINO REALIZADO!");
+          //exportar
+          console.log(classifier);
+          classifier.save();
+          stopGif();
+        }
       });
+    });
   } 
-
+    
 }
-
+  
 function addImages(){
   //este ciclo percorre os objetos
   for (let i = 0; i < images.length; i++) {
@@ -61,24 +60,26 @@ function addImages(){
   } 
 }
 
-function comecaGif() {
-  var img = document.getElementById('img');
-  img.style.display = "inline";
-  img.src = 'loading.gif';
+function beginGif() {
+  var img = document.getElementById('imggif');
   var body = document.getElementById('body');
+  img.style.display = "inline";
   body.style.opacity = "0.4";
+
+  setTimeout(function(){useFeatures()},100);
 }
 
-function paraGif() {
-  var img = document.getElementById('img');
-  img.style.display = "none";
+function stopGif() {
+  var img = document.getElementById('imggif');
   var body = document.getElementById('body');
+  img.style.display = "none";
   body.style.opacity = "1";
 }
 
 function sendModel() {
-  comecaGif();
-  useFeatures();
+  
+  beginGif();
+    
   var url = "http://localhost:4000/create";
   const data = images;  
 

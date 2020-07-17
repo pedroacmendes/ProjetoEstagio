@@ -1,0 +1,5 @@
+Pessoa
+Computador
+Caneca
+Banana
+Tulipa 
